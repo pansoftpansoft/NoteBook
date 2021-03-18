@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="note_name">
+        <item>Дело 1</item>
+        <item>Дело 2</item>
+        <item>Дело 3</item>
+        <item>Дело 4</item>
+        <item>Дело 5</item>
+    </string-array>
+    <string-array name="note_date">
+        <item>2021-01-01T09:20:35Z</item>
+        <item>2021-02-02T10:21:36Z</item>
+        <item>2021-03-03T11:22:37Z</item>
+        <item>2021-04-04T12:23:38Z</item>
+        <item>2021-05-05T13:24:39Z</item>
+    </string-array>
+    <string-array name="note_description">
+        <item>Дело 1 -------------- Дело 1</item>
+        <item>Дело 2 -------------- Дело 2</item>
+        <item>Дело 3 -------------- Дело 3</item>
+        <item>Дело 4 -------------- Дело 4</item>
+        <item>Дело 5  -----------Дело 5</item>
+    </string-array>
+</resources>
