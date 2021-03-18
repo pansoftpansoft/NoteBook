@@ -103,7 +103,7 @@ public class NoteListFragment extends androidx.fragment.app.Fragment {
     }
 
     private void showToTheRight(int idx) {
-        Log.e("idx" , String.valueOf(idx));
+        Log.e("idx", String.valueOf(idx));
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.note_edit_container, NoteEditFragment.newInstance(idx));

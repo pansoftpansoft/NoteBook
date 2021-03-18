@@ -2,6 +2,7 @@ package com.vitalarasoft.notebook;
 
 import java.util.Date;
 
+
 public class Note {
     public String mNoteName;
     public String mNoteData;
