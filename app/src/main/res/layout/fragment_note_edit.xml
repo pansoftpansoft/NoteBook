@@ -7,6 +7,7 @@
     android:orientation="vertical"
     tools:context=".NoteEditFragment">
 
+
     <TextView
         android:id="@+id/TextViewNoteName"
         android:layout_width="wrap_content"

@@ -22,25 +22,14 @@ import android.widget.TextView;
  */
 public class NoteEditFragment extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     public static final String ARG_NOTE_INDEX = "Note.note_index";
 
-    // TODO: Rename and change types of parameters
     private int mNoteIndex = -1;
 
     public NoteEditFragment() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment NoteEditFragment.
-     * @param.
-     */
-    // TODO: Rename and change types and number of parameters
     public static NoteEditFragment newInstance(int param1) {
         Log.e("param1", String.valueOf(param1));
         NoteEditFragment fragment = new NoteEditFragment();
