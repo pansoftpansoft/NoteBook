@@ -4,4 +4,5 @@
 <item android:id="@+id/toolBar_menu1" android:title="f1"/>
 <item android:id="@+id/toolBar_menu2" android:title="f2"/>
 <item android:id="@+id/toolBar_menu3" android:title="f3" app:showAsAction="never"/>
+
 </menu>

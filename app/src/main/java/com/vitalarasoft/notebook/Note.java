@@ -8,7 +8,6 @@ public class Note {
     public String mNoteData;
     public String mNoteDescription;
 
-
     public Note(String NoteName, String NoteData, String NoteDescription) {
         mNoteName = NoteName;
         mNoteData = NoteData;
