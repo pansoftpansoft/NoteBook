@@ -7,6 +7,7 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
+
     <fragment
         android:id="@+id/note_list_container"
         android:name="com.vitalarasoft.notebook.NoteListFragment"
@@ -20,6 +21,5 @@
         android:layout_width="0dp"
         android:layout_weight="3"
         android:layout_height="match_parent" />
-
 
 </LinearLayout>
