@@ -1,7 +1,9 @@
 package com.vitalarasoft.notebook;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 
 import android.util.Log;
@@ -11,17 +13,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.HashMap;
+import java.util.Locale;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.DividerItemDecoration;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-/**
- * A simple {@link androidx.fragment.app.Fragment} subclass.
- * Use the {@link NoteListFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class NoteListFragment extends androidx.fragment.app.Fragment {
 
     private int mCurrentImageIdx = -1;
@@ -46,30 +49,31 @@ public class NoteListFragment extends androidx.fragment.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        ViewGroup view = (ViewGroup) inflater.inflate(R.layout.fragment_note_list, container, false);
-        String[] noteNames = getResources().getStringArray(R.array.note_name);
-        String[] noteDates = getResources().getStringArray(R.array.note_date);
-        //String[] noteDescription = getResources().getStringArray(R.array.note_description);
-        int index = 0;
-        for (int i = 0; i < noteNames.length; i++) {
-            TextView tv = new TextView(getContext());
-            tv.setText(noteNames[i] + "\n" + "Дата : " + noteDates[i].toString());
-            tv.setTextSize(30);
-            final int idx = index;
-            tv.setOnClickListener((v) -> {
-                setCurrentImageIdx(idx);
-                if (getResources().getConfiguration().orientation ==
-                        Configuration.ORIENTATION_PORTRAIT) {
-                    goToSeparateActivity(idx);
-                } else {
-                    showToTheRight(idx);
-                }
-            });
-            view.addView(tv);
-            index++;
-        }
-        return view;
+        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_note_list, container, false);
+
+        DividerItemDecoration decorator = new DividerItemDecoration(requireActivity(),
+                LinearLayoutManager.VERTICAL);
+
+        decorator.setDrawable(getResources().getDrawable(R.drawable.decaration));
+        recyclerView.addItemDecoration(decorator);
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+
+        ViewHolderAdapter viewHolderAdapter = new ViewHolderAdapter(inflater,
+                new NoteDataSourceImpl(getResources()));
+        viewHolderAdapter.setOnClickListener((v, position) -> {
+            if (getResources().getConfiguration().orientation ==
+                    Configuration.ORIENTATION_PORTRAIT) {
+                goToSeparateActivity(position);
+            } else {
+                showToTheRight(position);
+            }
+        });
+
+        recyclerView.setAdapter(viewHolderAdapter);
+        //Log.e("note Names", String.valueOf(noteNames.length));
+        return recyclerView;
     }
 
     @Override
@@ -108,5 +112,76 @@ public class NoteListFragment extends androidx.fragment.app.Fragment {
         transaction.replace(R.id.note_edit_container, NoteEditFragment.newInstance(idx));
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.commit();
+    }
+
+    private static class ViewHolder extends RecyclerView.ViewHolder {
+        private static final AtomicInteger COUNTER = new AtomicInteger();
+        public final int id;
+        public final TextView textName;
+        public final TextView textDate;
+
+
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            id = COUNTER.incrementAndGet();
+            textName = itemView.findViewById(R.id.list_item_text);
+            textDate = itemView.findViewById(R.id.list_item_date);
+        }
+
+        public void populate(Note note) {
+            textName.setText(note.NoteName);
+            textDate.setText(note.NoteData);
+        }
+    }
+
+    private interface OnClickListener {
+        void onItemClick(View v, int position);
+    }
+
+    private static class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
+        private final LayoutInflater mInflater;
+        private final NoteSource mNoteSource;
+
+        private OnClickListener mOnClickListener;
+
+        public ViewHolderAdapter(LayoutInflater inflater, NoteSource noteSource) {
+            mNoteSource = noteSource;
+            //Log.e("note mValues", String.valueOf(mValues.length));
+            mInflater = inflater;
+        }
+
+        public void setOnClickListener(OnClickListener onClickListener) {
+            mOnClickListener = onClickListener;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View v = mInflater.inflate(R.layout.list_item, parent, false);
+            ViewHolder viewHolder = new ViewHolder(v);
+
+            Log.e(NoteListFragment.class.getCanonicalName(),
+                    String.format(Locale.getDefault(), "created holder id = %d", viewHolder.id));
+
+            return new ViewHolder(v);
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            Note note = mNoteSource.getItemAt(position);
+            holder.populate(note);
+            holder.itemView.setOnClickListener((v) -> {
+                if (mOnClickListener != null) {
+                    mOnClickListener.onItemClick(v, position);
+                }
+            });
+            Log.e(NoteListFragment.class.getCanonicalName(),
+                    String.format(Locale.getDefault(), "used holder id = %d", holder.id));
+        }
+
+        @Override
+        public int getItemCount() {
+            return mNoteSource.getItemsCount();
+        }
     }
 }
