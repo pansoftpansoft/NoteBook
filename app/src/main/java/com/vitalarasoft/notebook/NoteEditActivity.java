@@ -21,7 +21,6 @@ public class NoteEditActivity extends AppCompatActivity {
             Log.e("Stop", "2");
             finish();
             return;
-
         }
         Log.e("Stop", "3");
         if (savedInstanceState == null) {

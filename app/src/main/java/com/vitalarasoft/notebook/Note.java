@@ -4,13 +4,13 @@ import java.util.Date;
 
 
 public class Note {
-    public String mNoteName;
-    public String mNoteData;
-    public String mNoteDescription;
+    public final String NoteName;
+    public final String NoteData;
+    public final String NoteDescription;
 
     public Note(String NoteName, String NoteData, String NoteDescription) {
-        mNoteName = NoteName;
-        mNoteData = NoteData;
-        mNoteDescription = NoteDescription;
+        this.NoteName = NoteName;
+        this.NoteData = NoteData;
+        this.NoteDescription = NoteDescription;
     }
 }
