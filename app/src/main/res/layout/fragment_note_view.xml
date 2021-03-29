@@ -1,37 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_note_edit"
+    android:id="@+id/fragment_note_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="5dp"
     tools:context=".NoteViewFragment">
 
-    <TextView
-        android:id="@+id/TextViewNoteName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="TextViewNoteName" />
 
     <TextView
-        android:id="@+id/editTextNoteDate"
+        android:id="@+id/list_item_view_note_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="25dp"
+        android:padding="5dp"
+        android:text="TextViewNoteName1" />
+
+    <TextView
+        android:id="@+id/list_item_view_note_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
         android:padding="5dp"
         android:ems="10"
-        android:text="editTextNoteDate"/>
+        android:text="editTextNoteDate1"/>
 
     <TextView
-        android:id="@+id/editTextNoteDescription"
+        android:id="@+id/list_item_view_note_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="5dp"
+        android:textSize="20dp"
         android:ems="10"
         android:gravity="start|top"
-        android:text="editTextNoteDescription" />
-
-
+        android:text="editTextNoteDescription1"/>
 </LinearLayout>

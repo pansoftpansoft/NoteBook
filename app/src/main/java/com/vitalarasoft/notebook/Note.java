@@ -1,16 +1,41 @@
 package com.vitalarasoft.notebook;
 
-import java.util.Date;
-
 
 public class Note {
-    public final String NoteName;
-    public final String NoteData;
-    public final String NoteDescription;
+    public String mNoteName;
+    public String mNoteDate;
+    public String mNoteDescription;
 
-    public Note(String NoteName, String NoteData, String NoteDescription) {
-        this.NoteName = NoteName;
-        this.NoteData = NoteData;
-        this.NoteDescription = NoteDescription;
+    public Note(String NoteName, String NoteDate, String NoteDescription) {
+        mNoteName = NoteName;
+        mNoteDate = NoteDate;
+        mNoteDescription = NoteDescription;
     }
+
+
+    public String getNoteName() {
+        return mNoteName;
+    }
+
+    public void setNoteName(String NoteName) {
+        mNoteName = NoteName;
+    }
+
+    public String getNoteDate() {
+        return mNoteDate;
+    }
+
+    public void setNoteDate(String NoteDate) {
+        mNoteDate = NoteDate;
+    }
+
+    public String getNoteDescription() {
+        return mNoteDescription;
+    }
+
+    public void setNoteDescription(String NoteDescription) {
+        mNoteDescription = NoteDescription;
+    }
+
+
 }

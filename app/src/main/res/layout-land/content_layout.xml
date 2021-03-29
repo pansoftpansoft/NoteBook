@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/note_edit_container"
-        android:name="com.vitalarasoft.notebook.NoteEditFragment"
+        android:name="com.vitalarasoft.notebook.NoteViewFragment"
         android:layout_width="0dp"
         android:layout_weight="3"
         android:layout_height="match_parent" />
