@@ -21,7 +21,6 @@ public class NoteEditActivity extends AppCompatActivity {
             Log.e("Stop", "2");
             finish();
             return;
-
         }
         Log.e("Stop", "3");
         if (savedInstanceState == null) {
@@ -29,7 +28,7 @@ public class NoteEditActivity extends AppCompatActivity {
             int noteIndex = getIntent().getIntExtra(KEY_NOTE_INDEX, -1);
             FragmentManager fragmentManager = getSupportFragmentManager();
             FragmentTransaction transaction = fragmentManager.beginTransaction();
-            transaction.replace(R.id.note_edit_container, NoteEditFragment.newInstance(noteIndex));
+            transaction.replace(R.id.note_edit_container, NoteViewFragment.newInstance(noteIndex));
             transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
             transaction.commit();
         }
