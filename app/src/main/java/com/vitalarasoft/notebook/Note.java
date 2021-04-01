@@ -1,27 +1,44 @@
 package com.vitalarasoft.notebook;
 
 
-public class Note {
-    public String mNoteName;
-    public String mNoteDate;
-    public String mNoteDescription;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
-    public Note(String NoteName, String NoteDate, String NoteDescription) {
+import androidx.annotation.NonNull;
+
+public class Note {
+    @Nullable
+    public String mId;
+    @NonNull
+    public static String mNoteName;
+    public static String mNoteDate;
+    public static String mNoteDescription;
+
+    public Note(@NonNull String NoteName, String NoteDate, String NoteDescription) {
+        assert NoteName != null;
         mNoteName = NoteName;
         mNoteDate = NoteDate;
         mNoteDescription = NoteDescription;
     }
+    @Nullable
+    public String getId() {
+        return mId;
+    }
 
+    public void setId(@Nullable String Id) {
+        mId = Id;
+    }
 
-    public String getNoteName() {
+    @NonNull
+    public static String getNoteName() {
         return mNoteName;
     }
 
-    public void setNoteName(String NoteName) {
+    public void setNoteName(@NonNull String NoteName) {
         mNoteName = NoteName;
     }
 
-    public String getNoteDate() {
+    public static String getNoteDate() {
         return mNoteDate;
     }
 
@@ -29,7 +46,7 @@ public class Note {
         mNoteDate = NoteDate;
     }
 
-    public String getNoteDescription() {
+    public static String getNoteDescription() {
         return mNoteDescription;
     }
 

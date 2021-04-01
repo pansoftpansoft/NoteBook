@@ -28,6 +28,37 @@ public class NoteListFragment extends Fragment {
     private ViewHolderAdapter mViewHolderAdapter;
     private RecyclerView mRecyclerView;
 
+    private NoteSource.NoteDataSourceListener mListener = new NoteSource.NoteDataSourceListener() {
+        @Override
+        public void onItemAdded(int idx) {
+            if (mViewHolderAdapter != null) {
+                mViewHolderAdapter.notifyItemInserted(idx);
+            }
+        }
+
+        @Override
+        public void onItemRemoved(int idx) {
+            if (mViewHolderAdapter != null) {
+                mViewHolderAdapter.notifyItemRemoved(idx);
+            }
+        }
+
+        @Override
+        public void onItemUpdated(int idx) {
+            if (mViewHolderAdapter != null) {
+                mViewHolderAdapter.notifyItemChanged(idx);
+            }
+        }
+
+        @Override
+        public void onDataSetChanged() {
+            if (mViewHolderAdapter != null) {
+                mViewHolderAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
+
     public NoteListFragment() {
         // Required empty public constructor
     }
@@ -53,9 +84,9 @@ public class NoteListFragment extends Fragment {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
-        mNoteSource = NoteDataSourceImpl.getInstance(getResources());
+        mNoteSource = NoteDataSourceFirebaseImpl.getInstance();
         mViewHolderAdapter = new ViewHolderAdapter(this, mNoteSource);
-
+        mNoteSource.addNoteDataSourceListener(mListener);
         mViewHolderAdapter.setOnClickListener((v, position) -> {
             setLastSelectedPosition(position);
             if (getResources().getConfiguration().orientation ==
@@ -70,6 +101,12 @@ public class NoteListFragment extends Fragment {
         mRecyclerView.setAdapter(mViewHolderAdapter);
         //Log.e("note Names", String.valueOf(noteNames.length));
         return mRecyclerView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mNoteSource.removeNoteDataSourceListener(mListener);
     }
 
     @Override
@@ -126,7 +163,7 @@ public class NoteListFragment extends Fragment {
     public boolean onContextItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.note_item_menu_edit) {
             if (mLastSelectedPosition != -1) {
-                FragmentManager fragmentManager=getFragmentManager();
+                FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.note_list_container,
                         NoteEditorFragment.newInstance(mLastSelectedPosition));
@@ -158,11 +195,11 @@ public class NoteListFragment extends Fragment {
 //        intent.putExtra(NoteEditActivity.KEY_NOTE_INDEX, idx);
 //        startActivity(intent);
 
-        FragmentManager fragmentManager=getFragmentManager();
+        FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.note_list_container,
                 NoteViewFragment.newInstance(idx));
-                //NoteEditorFragment.newInstance(mLastSelectedPosition));
+        //NoteEditorFragment.newInstance(mLastSelectedPosition));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }

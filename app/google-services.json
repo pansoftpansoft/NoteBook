@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "953465051222",
+    "project_id": "notebook-4eb6a",
+    "storage_bucket": "notebook-4eb6a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:953465051222:android:ace3b34262b1c95a7403f7",
+        "android_client_info": {
+          "package_name": "com.vitalarasoft.notebook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "953465051222-0p232monb6nit023t5jfrj3842k2t1m2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCodZjOER86ZBS5h89bcfvDb-kV11vXzUA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "953465051222-0p232monb6nit023t5jfrj3842k2t1m2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

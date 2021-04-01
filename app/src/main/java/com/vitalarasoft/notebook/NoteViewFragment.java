@@ -59,19 +59,20 @@ public class NoteViewFragment extends Fragment {
         Log.e("mNoteIndex", String.valueOf(mNoteIndex));
         if (mNoteIndex != -1) {
 
-            final NoteSource noteSource = NoteDataSourceImpl.getInstance(getResources());
+            //final NoteSource noteSource = NoteDataSourceImpl.getInstance(getResources());
+            final NoteSource noteSource = NoteDataSourceFirebaseImpl.getInstance();
 
             Note note = noteSource.getItemAt(mNoteIndex);
 
-            String[] noteNames = getResources().getStringArray(R.array.note_name);
-            String[] noteDates = getResources().getStringArray(R.array.note_date);
-            String[] noteDescription = getResources().getStringArray(R.array.note_description);
+            //String[] noteNames = getResources().getStringArray(R.array.note_name);
+            //String[] noteDates = getResources().getStringArray(R.array.note_date);
+            //String[] noteDescription = getResources().getStringArray(R.array.note_description);
 
             TextView textViewNoteName = view.findViewById(R.id.list_item_view_note_name);
             TextView textNoteDate = view.findViewById(R.id.list_item_view_note_date);
             TextView textDescription = view.findViewById(R.id.list_item_view_note_description);
-            Log.e(" 2222 mNoteIndex", String.valueOf(mNoteIndex));
-            Log.e(" 2222 mNoteIndex", String.valueOf(noteNames.length));
+            Log.e(" 2221 mNoteIndex : ", String.valueOf(mNoteIndex));
+            //Log.e(" 2223 mNoteIndex : ", String.valueOf(noteNames.length));
             textViewNoteName.setText(note.mNoteName);
             textNoteDate.setText(note.mNoteDate);
             textDescription.setText(note.mNoteDescription);
