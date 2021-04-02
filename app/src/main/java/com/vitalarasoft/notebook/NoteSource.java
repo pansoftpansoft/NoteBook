@@ -25,12 +25,8 @@ public interface NoteSource {
     Note getItemAt(int idx);
 
     int getItemsCount();
-
     void add(@NonNull Note data);
-
-    void update(@NonNull Note data);
-
+    void updateNote(int position, Note data);
     void remove(int position);
-
     void clear();
 }
