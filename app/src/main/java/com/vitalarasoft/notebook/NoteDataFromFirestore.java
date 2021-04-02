@@ -31,11 +31,11 @@ public class NoteDataFromFirestore extends Note {
         this(data.getId(), data.getNoteName(), data.getNoteDate(), data.getNoteDescription());
     }
 
-    public final Map<String, Object> getFields() {
+    public static Map<String, Object> getFields(Note noteData) {
         HashMap<String, Object> fields = new HashMap<>();
-        fields.put(FIELD_NOTE_NAME, getNoteName());
-        fields.put(FIELD_NOTE_DATE, getNoteDate());
-        fields.put(FIELD_NOTE_DESCRIPTION, getNoteDescription());
+        fields.put(FIELD_NOTE_NAME, noteData.mNoteName);
+        fields.put(FIELD_NOTE_DATE, noteData.mNoteDate);
+        fields.put(FIELD_NOTE_DESCRIPTION, noteData.mNoteDescription);
         return Collections.unmodifiableMap(fields);
     }
 }
