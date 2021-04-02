@@ -20,7 +20,7 @@ import androidx.annotation.NonNull;
 public class NoteDataSourceFirebaseImpl extends BaseNoteDataSource {
     private static final String TAG = "NoteDataSourceFirebase";
     private volatile static NoteDataSourceFirebaseImpl sInstance;
-    private final static String COLLECTION_NOTE = "com.vitalarasoft.CollectionNote";
+    public final static String COLLECTION_NOTE = "com.vitalarasoft.CollectionNote";
 
     private final FirebaseFirestore mStore = FirebaseFirestore.getInstance();
 
@@ -43,6 +43,7 @@ public class NoteDataSourceFirebaseImpl extends BaseNoteDataSource {
                 .addOnCompleteListener(this::onFetchComplete)
                 .addOnFailureListener(this::onFetchFailed);
     }
+
 
 
     private void onFetchComplete(Task<QuerySnapshot> task) {
@@ -77,7 +78,7 @@ public class NoteDataSourceFirebaseImpl extends BaseNoteDataSource {
         }
 
         mData.add(noteData);
-        mCollection.add(noteData.getFields()).addOnSuccessListener(documentReference -> {
+        mCollection.add(noteData.getFields(noteData)).addOnSuccessListener(documentReference -> {
             noteData.setId(documentReference.getId());
         });
     }
@@ -97,5 +98,9 @@ public class NoteDataSourceFirebaseImpl extends BaseNoteDataSource {
         super.clear();
     }
 
-
+    @Override
+    public void updateNote(int position, Note noteData) {
+        String id = noteData.getId();
+        mCollection.document(id).set(NoteDataFromFirestore.getFields(noteData));
+    }
 }
