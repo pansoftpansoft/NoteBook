@@ -75,7 +75,7 @@ public class NoteEditorFragment extends Fragment {
             note.setNoteName(editTextNoteName.getText().toString());
             note.setNoteDate(editTextNoteDate.getText().toString());
             note.setNoteDescription(editTextNoteDescription.getText().toString());
-            noteSource.update(note);
+            noteSource.updateNote(mCurrentItemIdx, note);
             getFragmentManager().popBackStack();
         });
         return view;
