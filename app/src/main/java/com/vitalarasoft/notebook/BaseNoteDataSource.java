@@ -2,6 +2,9 @@ package com.vitalarasoft.notebook;
 
 import android.util.Log;
 
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -9,9 +12,14 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 
+import static com.vitalarasoft.notebook.NoteDataSourceFirebaseImpl.COLLECTION_NOTE;
+
 public abstract class BaseNoteDataSource implements NoteSource {
     private HashSet<NoteDataSourceListener> mListeners = new HashSet<>();
     protected final LinkedList<Note> mData = new LinkedList<>();
+
+    private final FirebaseFirestore mStore = FirebaseFirestore.getInstance();
+    private final CollectionReference mCollection = mStore.collection(COLLECTION_NOTE);
 
     public void addNoteDataSourceListener(NoteDataSourceListener listener) {
         mListeners.add(listener);
@@ -66,7 +74,7 @@ public abstract class BaseNoteDataSource implements NoteSource {
     }
 
     @Override
-    public void update(@NonNull Note data) {
+    public void updateNote(int position, @NonNull Note data) {
         Log.e("TAG update", "update: " + data.mNoteName) ;
         String id = data.getId();
         if (id != null) {
@@ -77,6 +85,8 @@ public abstract class BaseNoteDataSource implements NoteSource {
                     noteData.setNoteName(data.getNoteName());
                     noteData.setNoteDate(data.getNoteDate());
                     noteData.setNoteDescription(data.getNoteName());
+                    // Изменить документ по идентификатору
+                    mCollection.document(id).set(NoteDataFromFirestore.getFields(data));
                     notifyUpdated(idx);
                     return;
                 }
@@ -87,7 +97,9 @@ public abstract class BaseNoteDataSource implements NoteSource {
     }
 
     protected final void notifyUpdated(int idx) {
+        Log.e("1 TAG update",   "idx = " + idx) ;
         for (NoteDataSourceListener listener : mListeners) {
+            Log.e("2 TAG update",   "idx = " + idx) ;
             listener.onItemUpdated(idx);
         }
     }
