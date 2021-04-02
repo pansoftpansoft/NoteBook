@@ -82,11 +82,6 @@ public class NoteDataSourceFirebaseImpl extends BaseNoteDataSource {
         });
     }
 
-    public void update100(@NonNull Note data) {
-        String id = data.getId();
-        mCollection.document(id).set(NoteDataFromFirestore.getFields());
-    }
-
     @Override
     public void remove(int position) {
         String id = mData.get(position).getId();
