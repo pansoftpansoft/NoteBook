@@ -31,7 +31,7 @@ public class NoteDataFromFirestore extends Note {
         this(data.getId(), data.getNoteName(), data.getNoteDate(), data.getNoteDescription());
     }
 
-    public static final Map<String, Object> getFields() {
+    public final Map<String, Object> getFields() {
         HashMap<String, Object> fields = new HashMap<>();
         fields.put(FIELD_NOTE_NAME, getNoteName());
         fields.put(FIELD_NOTE_DATE, getNoteDate());
