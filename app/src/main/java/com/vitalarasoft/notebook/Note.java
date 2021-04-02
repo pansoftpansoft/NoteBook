@@ -10,9 +10,9 @@ public class Note {
     @Nullable
     public String mId;
     @NonNull
-    public static String mNoteName;
-    public static String mNoteDate;
-    public static String mNoteDescription;
+    public String mNoteName;
+    public String mNoteDate;
+    public String mNoteDescription;
 
     public Note(@NonNull String NoteName, String NoteDate, String NoteDescription) {
         assert NoteName != null;
@@ -30,7 +30,7 @@ public class Note {
     }
 
     @NonNull
-    public static String getNoteName() {
+    public String getNoteName() {
         return mNoteName;
     }
 
@@ -38,7 +38,7 @@ public class Note {
         mNoteName = NoteName;
     }
 
-    public static String getNoteDate() {
+    public String getNoteDate() {
         return mNoteDate;
     }
 
@@ -46,7 +46,7 @@ public class Note {
         mNoteDate = NoteDate;
     }
 
-    public static String getNoteDescription() {
+    public String getNoteDescription() {
         return mNoteDescription;
     }
 
