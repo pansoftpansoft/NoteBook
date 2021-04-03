@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 
 public class NoteDataSourceFirebaseImpl extends BaseNoteDataSource {
     private static final String TAG = "NoteDataSourceFirebase";
@@ -85,6 +86,10 @@ public class NoteDataSourceFirebaseImpl extends BaseNoteDataSource {
 
     @Override
     public void remove(int position) {
+
+        Log.e(TAG, "remove: 1010101010");
+
+
         String id = mData.get(position).getId();
         mCollection.document(id).delete();
         super.remove(position);

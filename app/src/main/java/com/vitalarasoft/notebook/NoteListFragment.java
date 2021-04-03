@@ -161,6 +161,7 @@ public class NoteListFragment extends Fragment {
 
     @Override
     public boolean onContextItemSelected(@NonNull MenuItem item) {
+
         if (item.getItemId() == R.id.note_item_menu_edit) {
             if (mLastSelectedPosition != -1) {
                 FragmentManager fragmentManager = getFragmentManager();
@@ -173,8 +174,17 @@ public class NoteListFragment extends Fragment {
             }
         } else if (item.getItemId() == R.id.note_item_menu_delete) {
             if (mLastSelectedPosition != -1) {
-                mNoteSource.remove(mLastSelectedPosition);
-                mViewHolderAdapter.notifyItemRemoved(mLastSelectedPosition);
+                Log.e("remove", "remove: 2030405060");
+                FragmentManager fragmentManager = getFragmentManager();
+                if (fragmentManager != null) {
+                    CustomBottomSheetDialogFragment mSheetDialog =
+                            CustomBottomSheetDialogFragment.newInstance();
+                    mSheetDialog.setOnDialogListener(dialogListener);
+                    mSheetDialog.show(fragmentManager, "CustomBottomSheetDialogFragment");
+                }
+                //                mNoteSource.remove(mLastSelectedPosition);
+                //                mViewHolderAdapter.notifyItemRemoved(mLastSelectedPosition);
+
             }
 
         } else {
@@ -183,6 +193,22 @@ public class NoteListFragment extends Fragment {
 
         return true;
     }
+
+    private OnDialogListener dialogListener = new OnDialogListener() {
+        @Override
+        public void onDialogOk() {
+            Log.e("remove", "remove: 100 - 2030405060");
+            mNoteSource.remove(mLastSelectedPosition);
+            mViewHolderAdapter.notifyItemRemoved(mLastSelectedPosition);
+        }
+
+        @Override
+        public void onDialogCancel() {
+            Log.e("remove", "remove: 200 - 2030405060");
+
+        }
+    };
+
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
