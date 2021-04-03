@@ -1,40 +1,63 @@
 package com.vitalarasoft.notebook;
 
-import android.content.Context;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-
-public class NoteListFragment extends androidx.fragment.app.Fragment {
-
+public class NoteListFragment extends Fragment {
+    private static final String ARG_FRUIT_IDX = "FruitListFragment.arg_fruit_idx";
     private int mCurrentImageIdx = -1;
+    private int mLastSelectedPosition = -1;
+    private NoteSource mNoteSource; /*mCardDataSource*/
+    private ViewHolderAdapter mViewHolderAdapter;
+    private RecyclerView mRecyclerView;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+    private NoteSource.NoteDataSourceListener mListener = new NoteSource.NoteDataSourceListener() {
+        @Override
+        public void onItemAdded(int idx) {
+            if (mViewHolderAdapter != null) {
+                mViewHolderAdapter.notifyItemInserted(idx);
+            }
+        }
 
-    // TODO: Rename and change types of parameters
+        @Override
+        public void onItemRemoved(int idx) {
+            if (mViewHolderAdapter != null) {
+                mViewHolderAdapter.notifyItemRemoved(idx);
+            }
+        }
+
+        @Override
+        public void onItemUpdated(int idx) {
+            if (mViewHolderAdapter != null) {
+                mViewHolderAdapter.notifyItemChanged(idx);
+            }
+        }
+
+        @Override
+        public void onDataSetChanged() {
+            if (mViewHolderAdapter != null) {
+                mViewHolderAdapter.notifyDataSetChanged();
+            }
+        }
+    };
+
 
     public NoteListFragment() {
         // Required empty public constructor
@@ -49,38 +72,48 @@ public class NoteListFragment extends androidx.fragment.app.Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        RecyclerView recyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_note_list, container, false);
+
+        setHasOptionsMenu(true);
+        mRecyclerView = (RecyclerView) inflater.inflate(R.layout.fragment_note_list, container, false);
+        mRecyclerView.setHasFixedSize(true);
 
         DividerItemDecoration decorator = new DividerItemDecoration(requireActivity(),
                 LinearLayoutManager.VERTICAL);
-
         decorator.setDrawable(getResources().getDrawable(R.drawable.decaration));
-        recyclerView.addItemDecoration(decorator);
+        mRecyclerView.addItemDecoration(decorator);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(requireActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-        ViewHolderAdapter viewHolderAdapter = new ViewHolderAdapter(inflater,
-                new NoteDataSourceImpl(getResources()));
-        viewHolderAdapter.setOnClickListener((v, position) -> {
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+        mNoteSource = NoteDataSourceFirebaseImpl.getInstance();
+        mViewHolderAdapter = new ViewHolderAdapter(this, mNoteSource);
+        mNoteSource.addNoteDataSourceListener(mListener);
+        mViewHolderAdapter.setOnClickListener((v, position) -> {
+            setLastSelectedPosition(position);
             if (getResources().getConfiguration().orientation ==
                     Configuration.ORIENTATION_PORTRAIT) {
-                goToSeparateActivity(position);
+                Log.e("!!! position NoteIndex", String.valueOf(mLastSelectedPosition));
+                goToSeparateActivity(mLastSelectedPosition);
             } else {
-                showToTheRight(position);
+                showToTheRight(mLastSelectedPosition);
             }
         });
 
-        recyclerView.setAdapter(viewHolderAdapter);
+        mRecyclerView.setAdapter(mViewHolderAdapter);
         //Log.e("note Names", String.valueOf(noteNames.length));
-        return recyclerView;
+        return mRecyclerView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mNoteSource.removeNoteDataSourceListener(mListener);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         if (savedInstanceState != null) {
-            mCurrentImageIdx = savedInstanceState.getInt(NoteEditFragment.ARG_NOTE_INDEX, -1);
+            mCurrentImageIdx = savedInstanceState.getInt(NoteViewFragment.ARG_NOTE_INDEX, -1);
             if (mCurrentImageIdx != -1 &&
                     getResources().getConfiguration().orientation ==
                             Configuration.ORIENTATION_LANDSCAPE) {
@@ -89,99 +122,105 @@ public class NoteListFragment extends androidx.fragment.app.Fragment {
         }
     }
 
+
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.note_list_menu, menu);
+        Log.e("1111", "onCreateView: 1111111112");
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        Log.e("1111", "onCreateView: 1111111113");
+        if (item.getItemId() == R.id.note_list_menu_add) {
+            mNoteSource.add(new Note("Edit me!!!", "Edit me!!!", "Edit me!!!"));
+            int position = mNoteSource.getItemsCount() - 1;
+            mViewHolderAdapter.notifyItemInserted(position);
+
+            ((RecyclerView) getView()).scrollToPosition(position);
+
+            //mRecyclerView.scrollToPosition(position);
+        } else if (item.getItemId() == R.id.note_list_menu_clear) {
+            mNoteSource.clear();
+            mViewHolderAdapter.notifyDataSetChanged();
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+    @Override
+    public void onCreateContextMenu(@NonNull ContextMenu menu,
+                                    @NonNull View v,
+                                    @Nullable ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater menuInflater = requireActivity().getMenuInflater();
+        menuInflater.inflate(R.menu.note_list_item_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.note_item_menu_edit) {
+            if (mLastSelectedPosition != -1) {
+                FragmentManager fragmentManager = getFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.note_list_container,
+                        NoteEditorFragment.newInstance(mLastSelectedPosition));
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+            }
+        } else if (item.getItemId() == R.id.note_item_menu_delete) {
+            if (mLastSelectedPosition != -1) {
+                mNoteSource.remove(mLastSelectedPosition);
+                mViewHolderAdapter.notifyItemRemoved(mLastSelectedPosition);
+            }
+
+        } else {
+            return super.onContextItemSelected(item);
+        }
+
+        return true;
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(NoteEditFragment.ARG_NOTE_INDEX, mCurrentImageIdx);
-    }
-
-    private void setCurrentImageIdx(int idx) {
-        mCurrentImageIdx = idx;
+        outState.putInt(NoteViewFragment.ARG_NOTE_INDEX, mCurrentImageIdx);
     }
 
     private void goToSeparateActivity(int idx) {
-        Intent intent = new Intent(getActivity(), NoteEditActivity.class);
-        intent.putExtra(NoteEditActivity.KEY_NOTE_INDEX, idx);
-        startActivity(intent);
+//        Intent intent = new Intent(getActivity(), NoteEditActivity.class);
+//        intent.putExtra(NoteEditActivity.KEY_NOTE_INDEX, idx);
+//        startActivity(intent);
+
+        FragmentManager fragmentManager = getFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.note_list_container,
+                NoteViewFragment.newInstance(idx));
+        //NoteEditorFragment.newInstance(mLastSelectedPosition));
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 
     private void showToTheRight(int idx) {
         Log.e("idx", String.valueOf(idx));
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.note_edit_container, NoteEditFragment.newInstance(idx));
+        transaction.replace(R.id.note_edit_container, NoteViewFragment.newInstance(idx));
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
         transaction.commit();
     }
 
-    private static class ViewHolder extends RecyclerView.ViewHolder {
-        private static final AtomicInteger COUNTER = new AtomicInteger();
-        public final int id;
-        public final TextView textName;
-        public final TextView textDate;
+    /* package */ void setLastSelectedPosition(int lastSelectedPosition) {
 
-
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            id = COUNTER.incrementAndGet();
-            textName = itemView.findViewById(R.id.list_item_text);
-            textDate = itemView.findViewById(R.id.list_item_date);
-        }
-
-        public void populate(Note note) {
-            textName.setText(note.NoteName);
-            textDate.setText(note.NoteData);
-        }
+        mLastSelectedPosition = lastSelectedPosition;
+        Log.e("mLastSelectedPosition=", String.valueOf(lastSelectedPosition));
     }
 
-    private interface OnClickListener {
+    public interface OnClickListener {
         void onItemClick(View v, int position);
     }
 
-    private static class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
-        private final LayoutInflater mInflater;
-        private final NoteSource mNoteSource;
-
-        private OnClickListener mOnClickListener;
-
-        public ViewHolderAdapter(LayoutInflater inflater, NoteSource noteSource) {
-            mNoteSource = noteSource;
-            //Log.e("note mValues", String.valueOf(mValues.length));
-            mInflater = inflater;
-        }
-
-        public void setOnClickListener(OnClickListener onClickListener) {
-            mOnClickListener = onClickListener;
-        }
-
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View v = mInflater.inflate(R.layout.list_item, parent, false);
-            ViewHolder viewHolder = new ViewHolder(v);
-
-            Log.e(NoteListFragment.class.getCanonicalName(),
-                    String.format(Locale.getDefault(), "created holder id = %d", viewHolder.id));
-
-            return new ViewHolder(v);
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            Note note = mNoteSource.getItemAt(position);
-            holder.populate(note);
-            holder.itemView.setOnClickListener((v) -> {
-                if (mOnClickListener != null) {
-                    mOnClickListener.onItemClick(v, position);
-                }
-            });
-            Log.e(NoteListFragment.class.getCanonicalName(),
-                    String.format(Locale.getDefault(), "used holder id = %d", holder.id));
-        }
-
-        @Override
-        public int getItemCount() {
-            return mNoteSource.getItemsCount();
-        }
-    }
 }
