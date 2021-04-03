@@ -24,7 +24,6 @@ class ViewHolderAdapter extends RecyclerView.Adapter<ViewHolder> {
         //Log.e("note mValues", String.valueOf(mValues.length));
         mFragment = fragment;
         mInflater = fragment.getLayoutInflater();
-
     }
 
     public void setOnClickListener(NoteListFragment.OnClickListener onClickListener) {

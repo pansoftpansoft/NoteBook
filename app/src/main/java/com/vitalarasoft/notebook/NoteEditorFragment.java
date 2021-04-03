@@ -47,7 +47,7 @@ public class NoteEditorFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mCurrentItemIdx = getArguments().getInt(ARG_ITEM_IDX,   -1);
+            mCurrentItemIdx = getArguments().getInt(ARG_ITEM_IDX, -1);
         }
     }
 
@@ -65,7 +65,7 @@ public class NoteEditorFragment extends Fragment {
         final TextInputEditText editTextNoteDescription = view.findViewById(R.id.list_item_note_description);
         final MaterialButton btnSave = view.findViewById(R.id.btn_save);
 
-        Log.e("note.mNoteName", "onCreateView: " + note.mNoteName );
+        Log.e("note.mNoteName", "onCreateView: " + note.mNoteName);
 
         editTextNoteName.setText(note.mNoteName);
         editTextNoteDate.setText(note.mNoteDate);

@@ -15,15 +15,13 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
     private OnDialogListener mDialogListener;
 
-    public static CustomBottomSheetDialogFragment newInstance(){
+    public static CustomBottomSheetDialogFragment newInstance() {
         return new CustomBottomSheetDialogFragment();
     }
 
-    public void setOnDialogListener(OnDialogListener dialogListener){
+    public void setOnDialogListener(OnDialogListener dialogListener) {
         mDialogListener = dialogListener;
     }
-
-
 
     @Nullable
     @Override
@@ -37,7 +35,7 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         MaterialButton buttonOk = view.findViewById(R.id.buttonOk);
         buttonOk.setOnClickListener((clickedView) -> {
-            if (mDialogListener != null){
+            if (mDialogListener != null) {
                 mDialogListener.onDialogOk();
             }
             dismiss();
@@ -45,7 +43,7 @@ public class CustomBottomSheetDialogFragment extends BottomSheetDialogFragment {
 
         MaterialButton buttonCancel = view.findViewById(R.id.buttonCancel);
         buttonCancel.setOnClickListener((clickedView) -> {
-            if (mDialogListener != null){
+            if (mDialogListener != null) {
                 mDialogListener.onDialogCancel();
             }
             dismiss();

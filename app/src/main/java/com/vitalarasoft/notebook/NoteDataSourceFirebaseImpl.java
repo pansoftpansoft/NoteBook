@@ -40,11 +40,10 @@ public class NoteDataSourceFirebaseImpl extends BaseNoteDataSource {
 
     private NoteDataSourceFirebaseImpl() {
         mCollection.orderBy("date"
-                ,Query.Direction.DESCENDING).get()
+                , Query.Direction.DESCENDING).get()
                 .addOnCompleteListener(this::onFetchComplete)
                 .addOnFailureListener(this::onFetchFailed);
     }
-
 
 
     private void onFetchComplete(Task<QuerySnapshot> task) {
@@ -68,7 +67,6 @@ public class NoteDataSourceFirebaseImpl extends BaseNoteDataSource {
     }
 
 
-
     @Override
     public void add(@NonNull Note data) {
         final NoteDataFromFirestore noteData;
@@ -86,10 +84,7 @@ public class NoteDataSourceFirebaseImpl extends BaseNoteDataSource {
 
     @Override
     public void remove(int position) {
-
         Log.e(TAG, "remove: 1010101010");
-
-
         String id = mData.get(position).getId();
         mCollection.document(id).delete();
         super.remove(position);

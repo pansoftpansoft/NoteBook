@@ -75,12 +75,12 @@ public abstract class BaseNoteDataSource implements NoteSource {
 
     @Override
     public void updateNote(int position, @NonNull Note data) {
-        Log.e("TAG update", "update: " + data.mNoteName) ;
+        Log.e("TAG update", "update: " + data.mNoteName);
         String id = data.getId();
         if (id != null) {
             int idx = 0;
             for (Note noteData : mData) {
-                Log.e("TAG update",   id + " = " + noteData.getId()) ;
+                Log.e("TAG update", id + " = " + noteData.getId());
                 if (id.equals(noteData.getId())) {
                     noteData.setNoteName(data.getNoteName());
                     noteData.setNoteDate(data.getNoteDate());
@@ -97,9 +97,9 @@ public abstract class BaseNoteDataSource implements NoteSource {
     }
 
     protected final void notifyUpdated(int idx) {
-        Log.e("1 TAG update",   "idx = " + idx) ;
+        Log.e("1 TAG update", "idx = " + idx);
         for (NoteDataSourceListener listener : mListeners) {
-            Log.e("2 TAG update",   "idx = " + idx) ;
+            Log.e("2 TAG update", "idx = " + idx);
             listener.onItemUpdated(idx);
         }
     }

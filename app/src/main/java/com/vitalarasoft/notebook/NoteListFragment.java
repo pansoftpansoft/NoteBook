@@ -126,7 +126,6 @@ public class NoteListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.note_list_menu, menu);
-        Log.e("1111", "onCreateView: 1111111112");
     }
 
 
@@ -182,33 +181,28 @@ public class NoteListFragment extends Fragment {
                     mSheetDialog.setOnDialogListener(dialogListener);
                     mSheetDialog.show(fragmentManager, "CustomBottomSheetDialogFragment");
                 }
-                //                mNoteSource.remove(mLastSelectedPosition);
-                //                mViewHolderAdapter.notifyItemRemoved(mLastSelectedPosition);
-
             }
 
         } else {
             return super.onContextItemSelected(item);
         }
-
         return true;
     }
 
     private OnDialogListener dialogListener = new OnDialogListener() {
         @Override
         public void onDialogOk() {
+            //Нажата кнопка подтверждающая удаление
             Log.e("remove", "remove: 100 - 2030405060");
-            mNoteSource.remove(mLastSelectedPosition);
+            mNoteSource.remove(mLastSelectedPosition);                      //Удаление записи
             mViewHolderAdapter.notifyItemRemoved(mLastSelectedPosition);
         }
 
         @Override
         public void onDialogCancel() {
-            Log.e("remove", "remove: 200 - 2030405060");
-
+            // TODO: 03.04.2021 - Кнопку отмены удаления пока ни как не обрабатываем
         }
     };
-
 
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
@@ -217,15 +211,11 @@ public class NoteListFragment extends Fragment {
     }
 
     private void goToSeparateActivity(int idx) {
-//        Intent intent = new Intent(getActivity(), NoteEditActivity.class);
-//        intent.putExtra(NoteEditActivity.KEY_NOTE_INDEX, idx);
-//        startActivity(intent);
 
         FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         fragmentTransaction.replace(R.id.note_list_container,
                 NoteViewFragment.newInstance(idx));
-        //NoteEditorFragment.newInstance(mLastSelectedPosition));
         fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
