@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="cancel">Отмена</string>
+    <string name="ok">Ok</string>
+    <string name="request_to_confirm_deletion_of_an_entry">Вы действительно хотите удалить эту запись?</string>
+    <string name="app_name">Записная книжка</string>
+</resources>
